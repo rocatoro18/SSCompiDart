@@ -69,13 +69,13 @@ C:\Users\rocat\Desktop\compidart-main\CompiladorDART_RCTR\obj\Debug\CompiladorDA
 C:\Users\rocat\Desktop\compidart-main\CompiladorDART_RCTR\obj\Debug\CompiladorDART_RCTR.csproj.CoreCompileInputs.cache
 C:\Users\rocat\Desktop\compidart-main\CompiladorDART_RCTR\obj\Debug\CompiladorDART_RCTR.exe
 C:\Users\rocat\Desktop\compidart-main\CompiladorDART_RCTR\obj\Debug\CompiladorDART_RCTR.pdb
-C:\Users\rocat\Desktop\SSCompiDart-main\CompiladorDART_RCTR\bin\Debug\CompiladorDART_RCTR.exe.config
-C:\Users\rocat\Desktop\SSCompiDart-main\CompiladorDART_RCTR\bin\Debug\CompiladorDART_RCTR.exe
-C:\Users\rocat\Desktop\SSCompiDart-main\CompiladorDART_RCTR\bin\Debug\CompiladorDART_RCTR.pdb
 C:\Users\rocat\Desktop\SSCompiDart-main\CompiladorDART_RCTR\obj\Debug\CompiladorDART_RCTR.csproj.AssemblyReference.cache
 C:\Users\rocat\Desktop\SSCompiDart-main\CompiladorDART_RCTR\obj\Debug\CompiladorDART_RCTR.Form1.resources
 C:\Users\rocat\Desktop\SSCompiDart-main\CompiladorDART_RCTR\obj\Debug\CompiladorDART_RCTR.Properties.Resources.resources
 C:\Users\rocat\Desktop\SSCompiDart-main\CompiladorDART_RCTR\obj\Debug\CompiladorDART_RCTR.csproj.GenerateResource.cache
 C:\Users\rocat\Desktop\SSCompiDart-main\CompiladorDART_RCTR\obj\Debug\CompiladorDART_RCTR.csproj.CoreCompileInputs.cache
+C:\Users\rocat\Desktop\SSCompiDart-main\CompiladorDART_RCTR\bin\Debug\CompiladorDART_RCTR.exe.config
+C:\Users\rocat\Desktop\SSCompiDart-main\CompiladorDART_RCTR\bin\Debug\CompiladorDART_RCTR.exe
+C:\Users\rocat\Desktop\SSCompiDart-main\CompiladorDART_RCTR\bin\Debug\CompiladorDART_RCTR.pdb
 C:\Users\rocat\Desktop\SSCompiDart-main\CompiladorDART_RCTR\obj\Debug\CompiladorDART_RCTR.exe
 C:\Users\rocat\Desktop\SSCompiDart-main\CompiladorDART_RCTR\obj\Debug\CompiladorDART_RCTR.pdb

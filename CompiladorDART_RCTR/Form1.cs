@@ -39,6 +39,10 @@ namespace CompiladorDART_RCTR
 
                     //Llamar a la verificación de tipos
                     VerificadorTipos verificar = new VerificadorTipos(arbolito2);
+
+                    //Generar codigo intermedio
+                    GeneradorCodigoIntermedio codigoIntermedio = new GeneradorCodigoIntermedio();
+                    codigoIntermedio.Ejecutar(arbolito2);
                 }
 
                 //Tablas que se muestran en el Form

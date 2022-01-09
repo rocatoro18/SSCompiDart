@@ -33,6 +33,8 @@ namespace CompiladorDART_RCTR
         Resta,
         Multiplicacion,
         Division,
+        Incremento,
+        Decremento,
         NADA
     }
     public enum OperacionCondicional
@@ -112,7 +114,8 @@ namespace CompiladorDART_RCTR
             }
             else
             {
-                CrearArbolSintacticoAbstracto();
+                    CrearArbolSintacticoAbstracto();
+ 
             }
             
             return nodoraiz;
@@ -152,33 +155,49 @@ namespace CompiladorDART_RCTR
 
         private NodoArbol ObtenerSiguienteArbol()
         {
-            switch (miListaTokenTemporal[puntero].ValorToken)
-            {
-                case -82: //if  *si*
-                    SiguienteArbol = CrearArbolIF();
-                    break;
-                case -1: //asignacion
-                    SiguienteArbol = CrearArbolAsignacion();
-                    break;
-                case -78: //for *por*
-                    SiguienteArbol = CrearArbolFor();
-                    break;         // por
-                                                   // 
-                case -106: // escritura*
-                    SiguienteArbol = CrearNodoEscrituraLectura();
-                    puntero++;
-                    break;    // inout print   *leer* 
 
-                case -113: // lectura*
-                    SiguienteArbol = CrearNodoEscrituraLectura();
-                    puntero++;
+                switch (miListaTokenTemporal[puntero].ValorToken)
+                {
+                    case -82: //if  *si*
+                        SiguienteArbol = CrearArbolIF();
+                        //puntero++;
+                        break;
+                    case -1: //asignacion
+                        if (miListaTokenTemporal[puntero + 1].ValorToken == -22 || miListaTokenTemporal[puntero + 1].ValorToken == -20)
+                        {
+                        break;
+                        }
+                        else
+                        {
+                        SiguienteArbol = CrearArbolAsignacion();
+                        }
+                        //puntero++;
+                    //SiguienteArbol = null;
+                    //puntero--;
+                    //SiguienteArbol = CrearArbolAsignacion();
                     break;
+                    case -78: //for *por*
+                        SiguienteArbol = CrearArbolFor();
+                    //puntero++;
+                    break;         // por
+                                       // 
+                    case -106: // escritura*
+                        SiguienteArbol = CrearNodoEscrituraLectura();
+                        puntero++;
+                        break;    // inout print   *leer* 
+
+                    case -113: // lectura*
+                        SiguienteArbol = CrearNodoEscrituraLectura();
+                        puntero++;
+                        break;
                     //return CrearNodoLectura();      // input read    *impresion*
 
-                default:
-                    SiguienteArbol = null;
-                    break;
-            }
+                    default:
+                        SiguienteArbol = null;
+                        break;
+                }
+  
+
             return SiguienteArbol;
         }
 
@@ -187,7 +206,7 @@ namespace CompiladorDART_RCTR
         public NodoArbol CrearArbolExpresion()
         {
             NodoArbol nodoRaiz = Termino();
-            while (miListaTokenTemporal[puntero].ValorToken == -6 || miListaTokenTemporal[puntero].ValorToken == -7)
+            while (miListaTokenTemporal[puntero].ValorToken == -6 || miListaTokenTemporal[puntero].ValorToken == -7 || miListaTokenTemporal[puntero].ValorToken == -33 || miListaTokenTemporal[puntero].ValorToken == -34)
             {
                 NodoArbol nodoTemp = NuevoNodoExpresion(tipoExpresion.Operador);
                 nodoTemp.hijoIzquierdo = nodoRaiz;
@@ -200,6 +219,7 @@ namespace CompiladorDART_RCTR
                 {
                     case -6: nodoTemp.soyDeTipoOperacion = tipoOperador.Suma; break;
                     case -7: nodoTemp.soyDeTipoOperacion = tipoOperador.Resta; break;
+                    case -33: nodoTemp.soyDeTipoOperacion = tipoOperador.Incremento; break;
                 }
                 if (miListaTokenTemporal[puntero].ValorToken == -6)
                 {
@@ -210,6 +230,12 @@ namespace CompiladorDART_RCTR
                 {
                     nodoTemp.pCode = "sbi;";
                     nodoTemp.lexema = "-";
+                }
+                if (miListaTokenTemporal[puntero].ValorToken == -33 || miListaTokenTemporal[puntero].ValorToken == -34)
+                {
+                    nodoRaiz = nodoTemp;
+                    puntero++;
+                    nodoRaiz.hijoDerecho = IncrementoDecremento();
                 }
                 else
                 {
@@ -222,6 +248,18 @@ namespace CompiladorDART_RCTR
             }
 
             return nodoRaiz;
+        }
+
+        public NodoArbol IncrementoDecremento()
+        {
+            NodoArbol t = new NodoArbol();
+            t = NuevoNodoExpresion(tipoExpresion.Constante);
+            t.pCode = " ldc 1";
+            t.SoyDeTipoDato = TipoDato.INT;
+            t.lexema = "1";
+            puntero++;
+
+            return t;
         }
 
         private NodoArbol Termino()
@@ -321,8 +359,18 @@ namespace CompiladorDART_RCTR
                     sentenciaAsignacion.pCode1 = "sto;";
                     //puntero += 2;
                     sentenciaAsignacion.SoyDeTipoDato = TablaSimbolos.ObtenerTipoDato(miListaTokenTemporal[puntero].Lexema, nombreClaseActiva, nombreMetodoActivo);
-                    puntero += 2;
-                    sentenciaAsignacion.hijoIzquierdo = CrearArbolExpresion();
+            //puntero += 1;
+            if (miListaTokenTemporal[puntero+1].ValorToken == -33 || miListaTokenTemporal[puntero + 1].ValorToken == -34)
+            {
+                puntero++;
+                sentenciaAsignacion.hijoIzquierdo = CrearArbolExpresion();
+            }
+            else
+            {
+                //puntero += 2;
+                sentenciaAsignacion.hijoIzquierdo = CrearArbolExpresion();
+            }
+                    //sentenciaAsignacion.hijoIzquierdo = CrearArbolExpresion();
 
 
             //} 
@@ -551,62 +599,64 @@ namespace CompiladorDART_RCTR
         {
             NodoArbol CrearNodoEscrituraLectura;
 
-            if ((miListaTokenTemporal[puntero + 3].ValorToken == -106))
+            if ((miListaTokenTemporal[puntero].ValorToken == -106))
             {
                 CrearNodoEscrituraLectura = NuevoNodoSentencia(TipoSentencia.ESCRIBIR);
-                if (miListaTokenTemporal[puntero + 5].ValorToken == -1)
+                if (miListaTokenTemporal[puntero + 2].ValorToken == -1)
                 {
-                    CrearNodoEscrituraLectura.SoyDeTipoDato = TablaSimbolos.ObtenerTipoDato(miListaTokenTemporal[puntero+5].Lexema, nombreClaseActiva, nombreMetodoActivo);
-                    CrearNodoEscrituraLectura.linea = miListaTokenTemporal[puntero + 5].Linea;
-                    CrearNodoEscrituraLectura.lexema = miListaTokenTemporal[puntero + 5].ValorToken.ToString();
+                    CrearNodoEscrituraLectura.SoyDeTipoDato = TablaSimbolos.ObtenerTipoDato(miListaTokenTemporal[puntero+2].Lexema, nombreClaseActiva, nombreMetodoActivo);
+                    CrearNodoEscrituraLectura.linea = miListaTokenTemporal[puntero + 2].Linea;
+                    CrearNodoEscrituraLectura.lexema = miListaTokenTemporal[puntero + 2].ValorToken.ToString();
                 }
-                else if (miListaTokenTemporal[puntero + 5].ValorToken == -2)
+                else if (miListaTokenTemporal[puntero + 2].ValorToken == -2)
                 {
                     CrearNodoEscrituraLectura.SoyDeTipoDato = TipoDato.INT;
-                    CrearNodoEscrituraLectura.linea = miListaTokenTemporal[puntero + 5].Linea;
-                    CrearNodoEscrituraLectura.lexema = miListaTokenTemporal[puntero + 5].ValorToken.ToString();
+                    CrearNodoEscrituraLectura.linea = miListaTokenTemporal[puntero + 2].Linea;
+                    CrearNodoEscrituraLectura.lexema = miListaTokenTemporal[puntero + 2].ValorToken.ToString();
                 }
-                else if (miListaTokenTemporal[puntero + 5].ValorToken == -3)
+                else if (miListaTokenTemporal[puntero + 2].ValorToken == -3)
                 {
                     CrearNodoEscrituraLectura.SoyDeTipoDato = TipoDato.DOBLE;
-                    CrearNodoEscrituraLectura.linea = miListaTokenTemporal[puntero + 5].Linea;
-                    CrearNodoEscrituraLectura.lexema = miListaTokenTemporal[puntero + 5].ValorToken.ToString();
+                    CrearNodoEscrituraLectura.linea = miListaTokenTemporal[puntero + 2].Linea;
+                    CrearNodoEscrituraLectura.lexema = miListaTokenTemporal[puntero + 2].ValorToken.ToString();
                 }
-                else if (miListaTokenTemporal[puntero + 5].ValorToken == -4)
+                else if (miListaTokenTemporal[puntero + 2].ValorToken == -4)
                 {
                     CrearNodoEscrituraLectura.SoyDeTipoDato = TipoDato.STRING;
-                    CrearNodoEscrituraLectura.linea = miListaTokenTemporal[puntero + 5].Linea;
-                    CrearNodoEscrituraLectura.lexema = miListaTokenTemporal[puntero + 5].ValorToken.ToString();
+                    //CrearNodoEscrituraLectura.tipoValorNodoHijoIzquierdo = TipoDato.STRING;
+                    CrearNodoEscrituraLectura.linea = miListaTokenTemporal[puntero + 2].Linea;
+                    CrearNodoEscrituraLectura.lexema = miListaTokenTemporal[puntero + 2].Lexema;
                 }
-                puntero += 5;
+                puntero += 2;
                 CrearNodoEscrituraLectura.hijoIzquierdo = CrearArbolExpresion();
                 CrearNodoEscrituraLectura.pCode = "wr";
+                //CrearNodoEscrituraLectura.tipoValorNodoHijoIzquierdo = TipoDato.STRING;
                 puntero--;
             }
             else
             {
                 CrearNodoEscrituraLectura = NuevoNodoSentencia(TipoSentencia.LEER);
-                if (miListaTokenTemporal[puntero + 5].ValorToken == -1)
+                if (miListaTokenTemporal[puntero + 2].ValorToken == -1)
                 {
-                    CrearNodoEscrituraLectura.SoyDeTipoDato = TablaSimbolos.ObtenerTipoDato(miListaTokenTemporal[puntero + 5].Lexema, nombreClaseActiva, nombreMetodoActivo);
-                    CrearNodoEscrituraLectura.linea = miListaTokenTemporal[puntero + 5].Linea;
+                    CrearNodoEscrituraLectura.SoyDeTipoDato = TablaSimbolos.ObtenerTipoDato(miListaTokenTemporal[puntero + 2].Lexema, nombreClaseActiva, nombreMetodoActivo);
+                    CrearNodoEscrituraLectura.linea = miListaTokenTemporal[puntero + 2].Linea;
                 }
-                else if (miListaTokenTemporal[puntero + 5].ValorToken == -2)
+                else if (miListaTokenTemporal[puntero + 2].ValorToken == -2)
                 {
                     CrearNodoEscrituraLectura.SoyDeTipoDato = TipoDato.INT;
-                    CrearNodoEscrituraLectura.linea = miListaTokenTemporal[puntero + 5].Linea;
+                    CrearNodoEscrituraLectura.linea = miListaTokenTemporal[puntero + 2].Linea;
                 }
-                else if (miListaTokenTemporal[puntero + 5].ValorToken == -3)
+                else if (miListaTokenTemporal[puntero + 2].ValorToken == -3)
                 {
                     CrearNodoEscrituraLectura.SoyDeTipoDato = TipoDato.DOBLE;
-                    CrearNodoEscrituraLectura.linea = miListaTokenTemporal[puntero + 5].Linea;
+                    CrearNodoEscrituraLectura.linea = miListaTokenTemporal[puntero + 2].Linea;
                 }
-                else if (miListaTokenTemporal[puntero + 5].ValorToken == -4)
+                else if (miListaTokenTemporal[puntero + 2].ValorToken == -4)
                 {
                     CrearNodoEscrituraLectura.SoyDeTipoDato = TipoDato.STRING;
-                    CrearNodoEscrituraLectura.linea = miListaTokenTemporal[puntero + 5].Linea;
+                    CrearNodoEscrituraLectura.linea = miListaTokenTemporal[puntero + 2].Linea;
                 }
-                puntero += 5;
+                puntero += 2;
                 CrearNodoEscrituraLectura.hijoIzquierdo = CrearArbolExpresion();
                 CrearNodoEscrituraLectura.pCode = "rd";
                 puntero--;
@@ -638,6 +688,7 @@ namespace CompiladorDART_RCTR
         public NodoArbol NuevoNodoSentencia(TipoSentencia tipoSentencia)
         {
             NodoArbol nodo = new NodoArbol();
+
             nodo.soyDeTipoNodo = TipoNodoArbol.Sentencia;
             nodo.soySentenciaDeTipo = tipoSentencia;
 
