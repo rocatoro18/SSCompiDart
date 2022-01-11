@@ -123,7 +123,10 @@ namespace CompiladorDART_RCTR
 
         private NodoArbol NodoHermano()
         {
+
+
             NodoArbol t;
+
             do
             {
                 t = ObtenerSiguienteArbol();
@@ -163,7 +166,7 @@ namespace CompiladorDART_RCTR
                         //puntero++;
                         break;
                     case -1: //asignacion
-                        if (miListaTokenTemporal[puntero + 1].ValorToken == -22 || miListaTokenTemporal[puntero + 1].ValorToken == -20)
+                        if (miListaTokenTemporal[puntero - 1].ValorToken == -68 || miListaTokenTemporal[puntero - 1].ValorToken == -89 || miListaTokenTemporal[puntero + 1].ValorToken == -20 || miListaTokenTemporal[puntero + 2].ValorToken == -113)
                         {
                         SiguienteArbol = null;
                         //break;
@@ -183,8 +186,9 @@ namespace CompiladorDART_RCTR
                     break;         // por
                                        // 
                     case -106: // escritura*
-                        SiguienteArbol = CrearNodoEscrituraLectura();
-                        puntero++;
+                               SiguienteArbol = CrearNodoEscrituraLectura();
+                               //SiguienteArbol = CrearNodoEscritura();
+                               puntero++;
                         break;    // inout print   *leer* 
 
                     case -113: // lectura*
@@ -217,6 +221,7 @@ namespace CompiladorDART_RCTR
                     miListaTokenTemporal[puntero].ValorToken == -6
                     ? tipoOperador.Suma
                     : tipoOperador.Resta;
+                /*
                 switch (miListaTokenTemporal[puntero].ValorToken)
                 {
                     case -6: nodoTemp.soyDeTipoOperacion = tipoOperador.Suma; break;
@@ -236,7 +241,7 @@ namespace CompiladorDART_RCTR
                 nodoRaiz = nodoTemp;
                 puntero++;
                 nodoRaiz.hijoDerecho = Termino();
-                /*
+                */
                 switch (miListaTokenTemporal[puntero].ValorToken)
                 {
                     case -6: nodoTemp.soyDeTipoOperacion = tipoOperador.Suma; break;
@@ -265,7 +270,7 @@ namespace CompiladorDART_RCTR
                     nodoRaiz = nodoTemp;
                     puntero++;
                     nodoRaiz.hijoDerecho = Termino();
-                }*/
+                }
 
             }
 
@@ -415,7 +420,7 @@ namespace CompiladorDART_RCTR
         #region Crear Arbol If
         public NodoArbol CrearArbolIF()
         {
- 
+
             var nodoArbolIF = NuevoNodoSentencia(TipoSentencia.IF);
             puntero += 2;
             nodoArbolIF.hijoIzquierdo = CrearArbolCondicional();
@@ -446,7 +451,126 @@ namespace CompiladorDART_RCTR
             }
             nodoArbolIF.pCode1 = "lab Ln";
             return nodoArbolIF;
+            /*
+            var nodoArbolIF = NuevoNodoSentencia(TipoSentencia.IF);
+            puntero += 2;
+            contadorIF++;
+            nodoArbolIF.pCode = "fjp" + " " + "L" + contadorIF;
+            nodoArbolIF.hijoIzquierdo = CrearArbolCondicional();
+            puntero += 2;
+            //nodoArbolIF.pCode = "fjp" + " " + "Ln";
+            //puntero += 2;
+            //error cuando no hay comandos cuando la condicional es verdadera
+            // validar que exista codigo en el TRUE
+            /*
+            nodoArbolIF.hijoCentro = ObtenerSiguienteArbol();
+            puntero += 2;
+            */
+            //codigo cuando sea falso
+            /*
+            nodoArbolIF.pCode2 = "ujp" + " " + "L" + (contadorIF + 1).ToString();
+            nodoArbolIF.pCode1 = "lab" + " " + "L" + contadorIF;
+            nodoArbolIF.pCode3 = "lab" + " " + "L" + (contadorIF + 1).ToString();
 
+            if (miListaTokenTemporal[puntero].ValorToken != -23) // }
+            {
+                if (miListaTokenTemporal[puntero].ValorToken == -99 || miListaTokenTemporal[puntero].ValorToken == -100 || miListaTokenTemporal[puntero].ValorToken == -102 )//tipo de dato (string,int,double)
+                {
+
+                    puntero++;
+                    while (miListaTokenTemporal[puntero].ValorToken != -23) // }
+                    {
+                        //nodoArbolIF.hijoCentro = ObtenerSiguienteArbol();
+                        nodoArbolIF.hijoCentro = HermanoSentencia();
+                        //nodoArbolIF.hijoCentro = NodoHermano();
+                    }
+
+                    if (puntero > miListaTokenTemporal.Count - 1)
+                    {
+                        puntero--;
+
+                    }
+                }
+                else
+                {
+
+                    while (miListaTokenTemporal[puntero].ValorToken != -23) // }
+                    {
+                        contadorIF++;
+                        //nodoArbolIF.hijoCentro = ObtenerSiguienteArbol();
+                        nodoArbolIF.hijoCentro = HermanoSentencia();
+                        //nodoArbolIF.hijoCentro = NodoHermano();
+                    }
+                    //contadorIF++;
+                    if (puntero > miListaTokenTemporal.Count - 1)
+                    {
+                        puntero--;
+
+                    }
+                }
+            }
+            puntero++;
+            if (puntero == miListaTokenTemporal.Count)
+            {
+                //nodoArbolIF.pCode1 = "lab" + " " + "L" + contadorIF;
+                return nodoArbolIF;
+            }
+            else
+            {
+                if (miListaTokenTemporal[puntero].ValorToken == -47)//demas
+                {
+                    puntero += 2;
+                    if (miListaTokenTemporal[puntero].ValorToken != -23)//}
+                    {
+                        if (miListaTokenTemporal[puntero].ValorToken == -99 || miListaTokenTemporal[puntero].ValorToken == -100 || miListaTokenTemporal[puntero].ValorToken == -102)//tipo de dato (string,int,double)
+                        {
+                            puntero++;
+                            // nodoArbolIF.pCode2 = "ujp ln"+contadorELSE;
+                            //nodoArbolIF.pCode3 = "lab l"+contadorIF;
+                            nodoArbolIF.hijoDerecho = HermanoSentencia();
+                            //nodoArbolIF.hijoDerecho = ObtenerSiguienteArbol();
+                            //nodoArbolIF.hijoDerecho = NodoHermano();
+                            if (puntero > miListaTokenTemporal.Count - 1)
+                            {
+                                puntero++;
+
+                            }
+
+                        }
+                        else
+                        {
+                            contadorIF++;
+                            //nodoArbolIF.hijoDerecho = ObtenerSiguienteArbol();
+                            nodoArbolIF.hijoDerecho = HermanoSentencia();
+                            if (puntero > miListaTokenTemporal.Count - 1)
+                            {
+                                puntero++;
+
+                            }
+                        }
+                    }
+
+                }
+                return nodoArbolIF;
+            }
+            /*if (miListaTokenTemporal[puntero].ValorToken == -47)  // cambiar por el numero de token
+            {
+                nodoArbolIF.pCode2 = "ujp lx";
+                nodoArbolIF.pCode3 = "lab lx";
+                puntero++;
+                if (miListaTokenTemporal[puntero].ValorToken == -82) // cambiar por el numero de token
+                {
+                    CrearArbolIF();
+                }
+                else
+                {
+                    puntero++;
+                    nodoArbolIF.hijoDerecho = ObtenerSiguienteArbol();
+                }
+            }*/
+            //nodoArbolIF.pCode1 = "lab Ln";
+            //return nodoArbolIF;
+            
 
         }
 
@@ -454,13 +578,22 @@ namespace CompiladorDART_RCTR
         {
             NodoArbol arbolSentencia;
 
-            do
+            
+                do
+                {
+                    if (miListaTokenTemporal[puntero].ValorToken == -99 || miListaTokenTemporal[puntero].ValorToken == -100 || miListaTokenTemporal[puntero].ValorToken == -103 || miListaTokenTemporal[puntero].ValorToken == -102) { puntero++; }
+                    arbolSentencia = ObtenerSiguienteArbol();
+                    
+                    //puntero++;
+                } while (arbolSentencia == null);
+            
+            /*do
             {
                 if (miListaTokenTemporal[puntero].ValorToken == -99 || miListaTokenTemporal[puntero].ValorToken == -100 || miListaTokenTemporal[puntero].ValorToken == -103 || miListaTokenTemporal[puntero].ValorToken == -102) { puntero++; }
                 arbolSentencia = ObtenerSiguienteArbol();
                 puntero++;
             } while (arbolSentencia == null);
-
+            */
 
 
             if (miListaTokenTemporal.Count > puntero)
@@ -548,11 +681,12 @@ namespace CompiladorDART_RCTR
         #region Crear Arbol de Escritura
         private NodoArbol CrearNodoEscritura()
         {
-            //throw new NotImplementedException();
             var nodoArbolWrite = NuevoNodoSentencia(TipoSentencia.ESCRIBIR);
-
             puntero += 2;
-            nodoArbolWrite.hijoCentro = CrearArbolExpresion();
+            nodoArbolWrite.linea = miListaTokenTemporal[puntero].Linea;
+            nodoArbolWrite.hijoIzquierdo = CrearArbolExpresion();
+            nodoArbolWrite.pCode = "wri " + nodoArbolWrite.hijoIzquierdo.lexema;
+            puntero++;
 
             return nodoArbolWrite;
         }

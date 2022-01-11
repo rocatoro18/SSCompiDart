@@ -217,6 +217,10 @@ namespace CompiladorDART_RCTR
             {
                 return miArbol.SoyDeTipoDato;
             }
+            else if (miArbol.SoyDeTipoExpresion == tipoExpresion.Cadena)
+            {
+                return miArbol.SoyDeTipoDato;
+            }
             return TipoDato.NADA;
         }
 
