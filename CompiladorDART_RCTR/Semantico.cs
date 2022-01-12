@@ -672,22 +672,6 @@ namespace CompiladorDART_RCTR
             
         }
 
-        public static string ObtenerDireccionMemoriaRam(string lexemaVariable, NodoClase nodoClaseActiva, string nombreMetodoActivo)
-        {
-            var resultado =
-                nodoClaseActiva.TSM.FirstOrDefault(x => x.Key == nombreMetodoActivo).Value.TablaSimbolosVariables.FirstOrDefault(y => y.Key.ToString() == lexemaVariable).Value.direccionMemoria;
-            return resultado;
-
-        }
-
-        public static NodoVariable obtenerNodoVariable(string lexemaVariable, NodoClase nodoClaseActiva, string nombreMetodoActivo)
-        {
-            var resultado =
-                nodoClaseActiva.TSM.FirstOrDefault(x => x.Key == nombreMetodoActivo).Value.TablaSimbolosVariables.FirstOrDefault(y => 
-                y.Key.ToString() == lexemaVariable).Value;
-            return resultado;
-        }
-
         static public void ExisteVaraible(string lexema, NodoMetodo minoMetodo,int line)
         {
             herencia = true;
@@ -698,8 +682,6 @@ namespace CompiladorDART_RCTR
                 herencia = false;
             }
         }
-
-
 
         #endregion
 

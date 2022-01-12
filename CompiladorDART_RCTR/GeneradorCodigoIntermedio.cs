@@ -43,7 +43,7 @@ namespace CompiladorDART_RCTR
             }
             else if (miArbol.soyDeTipoNodo == TipoNodoArbol.Sentencia && miArbol.soySentenciaDeTipo == TipoSentencia.ESCRIBIR)
             {
-                GenerarCodigoIntermedioLeer(miArbol);
+                GenerarCodigoIntermedioEscribir(miArbol);
             }
         }
 
@@ -114,13 +114,13 @@ namespace CompiladorDART_RCTR
             sw = File.AppendText("C:\\Users\\rocat\\Desktop\\PCODE.txt");
             sw.WriteLine(miArbol.pCode3); //sto
             sw.Close();
-            /* sw = File.AppendText("C:\\Users\\peche\\Documents\\PCODE.txt");
+            /* sw = File.AppendText("C:\\Users\\rocat\\Desktop\\PCODE.txt");
              sw.WriteLine(miArbol.pCode1); //sto
              sw.Close();
              */
         }
         //ya jala pero genera un salto de linea wr con lo que viene codigo comentado ponia el codigo p alrevez
-        public void GenerarCodigoIntermedioLeer(NodoArbol miArbol)
+        public void GenerarCodigoIntermedioEscribir(NodoArbol miArbol)
         {
             sw = File.AppendText("C:\\Users\\rocat\\Desktop\\PCODE.txt");
             sw.WriteLine(miArbol.pCode);
@@ -153,20 +153,7 @@ namespace CompiladorDART_RCTR
             sw.Close();
 
         }
-
-        public void GenerarCodigoIntermedioWrite(NodoArbol miArbol)
-        {
-            sw = File.AppendText("C:\\Users\\rocat\\Desktop\\PCODE.txt");
-            //sw.WriteLine(miArbol.pCode);
-            sw.Close();
-            if (miArbol.hijoIzquierdo != null)
-            {
-                ObtenerSiguienteCodigoIntermedio(miArbol.hijoIzquierdo);
-            }
-            sw = File.AppendText("C:\\Users\\rocat\\Desktop\\PCODE.txt");
-            sw.WriteLine(miArbol.pCode);
-            sw.Close();
-        }
+        /*
 
         public void GenerarCodigoIntermedioRead(NodoArbol miArbol)
         {
@@ -181,7 +168,7 @@ namespace CompiladorDART_RCTR
             sw.WriteLine(miArbol.pCode);
             sw.Close();
         }
-
+        */
         public void GenerarCodigoIntermedioFor(NodoArbol miArbol)
         {
             sw = File.AppendText("C:\\Users\\rocat\\Desktop\\PCODE.txt");

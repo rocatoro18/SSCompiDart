@@ -75,37 +75,6 @@ namespace CompiladorDART_RCTR
                 EjecutarHermano(arbolSintactico.hermano);
             }
         }
-        /*
-        private void obtenerSiguienteVerificacion(NodoArbol arbolSintactico)
-        {
-            if (arbolSintactico.soyDeTipoNodo == TipoNodoArbol.Sentencia
-               && arbolSintactico.soySentenciaDeTipo == TipoSentencia.ASIGNACION)
-            {
-                RecorridoAsignacion(arbolSintactico);
-            }
-            if (arbolSintactico.soyDeTipoNodo == TipoNodoArbol.Sentencia
-               && arbolSintactico.soySentenciaDeTipo == TipoSentencia.FOR)
-            {
-                // RecorridoFor(arbolSintactico);
-            }
-            if (arbolSintactico.soyDeTipoNodo == TipoNodoArbol.Sentencia
-               && arbolSintactico.soySentenciaDeTipo == TipoSentencia.IF)
-            {
-                RecorridoIF(arbolSintactico);
-            }
-            if (arbolSintactico.soyDeTipoNodo == TipoNodoArbol.Sentencia
-                 && arbolSintactico.soySentenciaDeTipo == TipoSentencia.ESCRIBIR)
-            {
-                //RecorridoESCRIBIR(arbolSintactico);
-            }
-
-            if (arbolSintactico.soyDeTipoNodo == TipoNodoArbol.Sentencia
-                && arbolSintactico.soySentenciaDeTipo == TipoSentencia.LEER)
-            {
-                //RecorridoLEER(arbolSintactico);
-            }
-        }
-        */
 
         public void RecorridoIF(NodoArbol miArbol)
         {
